@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Products</h2>
+        {% if 'user' in session and session.user.is_seller %}
+        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#addProductModal">
+            Add Product
+        </button>
+        {% endif %}
+    </div>
+
+    <div class="row">
+        {% for product in products %}
+        <div class="col-sm-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="{{ product.image }}" class="card-img-top" alt="Product Image" width="300" height="300">
+                <div class="card-body">
+                    <a href="{{ url_for('product_info', product_id=product.id) }}">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                    </a>
+                    <p class="card-text">Price: ${{ product.price }}</p>
+                    {% if 'user' in session %}
+                    <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="post">
+                        <button class="btn btn-success w-100" type="submit">Add to Cart</button>
+                    </form>
+                    {% endif %}
+                    {% if 'user' in session and session.user.is_seller and session.user.id == product.user_id %}
+                    <form action="{{ url_for('delete_product', product_id=product.id) }}" method="post">
+                        <button class="btn btn-danger w-100 mt-2" type="submit">Delete</button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productModalLabel">Add Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ url_for('add_products') }}" method="post" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="productName" class="form-label">Product Name</label>
+                            <input type="text" name="name" class="form-control" id="productName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="productPrice" class="form-label">Price</label>
+                            <input type="number" name="price" class="form-control" id="productPrice" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="productImage" class="form-label">Upload Image</label>
+                            <input type="file" name="image" class="form-control" id="productImage" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="productInfo" class="form-label">Product Info</label>
+                            <textarea name="info" class="form-control" id="productInfo" rows="3" required></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-warning    ">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

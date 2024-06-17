@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+    <h2>Purchase Successful</h2>
+    <a href="{{ url_for('cart') }}" class="btn btn-warning">Go Back To Cart</a>
+    <a href="{{ url_for('products') }}" class="btn btn-warning">Continue Shopping</a>
+</div>
+{% endblock %}

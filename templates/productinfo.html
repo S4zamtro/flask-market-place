@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('products') }}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <img src="/{{ product.image }}" class="card-img-top" alt="Product Image" height="400">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title">{{ product.name }}</h2>
+                    <p class="card-text">Price: ${{ product.price }}</p>
+                    <p class="card-text">Availability: In Stock</p>
+                    <p class="card-text">Description: {{ product.info }}</p>
+                    <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="post">
+                        <button class="btn btn-success" type="submit">Add to Cart</button>
+                        <div class="card-body">
+                            <h3 class="card-title">Added by:</h3>
+                            <div class="d-flex align-items-center mb-2">
+                                <img src="{{ url_for('static', filename='Default.jpg') }}" class="rounded-circle me-3" alt="User Avatar" width="50" height="50">
+                                <div>
+                                    <a href="{{ url_for('other_user_profile', user_id=product.user.id) }}">
+                                        <h5 class="mb-0">{{ user.username }}</h5>
+                                    </a>
+                                </div>
+                            </div>
+                            <p>{{ user.bio }}</p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="card-title">Customer Reviews</h2>
+            <div class="comments">
+                {% for comment in product.comments %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                                <img src="{{ url_for('static', filename='Kanye.jpg') }}" class="rounded-circle me-3" alt="User Avatar" width="50" height="50">
+                                <div>
+                                    <a href="{{ url_for('other_user_profile', user_id=comment.user.id) }}">
+                                        <h5 class="mb-0">{{ comment.user.username }}</h5>
+                                    </a>
+                                    <small class="text-muted">{{ comment.rating }} Stars</small>
+                                </div>
+                                {% if 'user' in session and comment.user_id == session['user']['id'] %}
+                                    <form action="{{ url_for('delete_comment', comment_id=comment.id) }}" method="post" class="ms-auto">
+                                        <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                            <p>{{ comment.content }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            {% if 'user' in session %}
+                <form action="{{ url_for('submit_comment', product_id=product.id) }}" method="post">
+                    <div class="form-group">
+                        <label for="comment">Add your comment:</label>
+                        <textarea class="form-control" id="comment" name="content" rows="3" placeholder="Type your comment here" required></textarea>
+                        <label for="rating">Rating:</label>
+                        <select class="form-control" id="rating" name="rating">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary mt-2" type="submit">Submit</button>
+                </form>
+            {% else %}
+                <p>Please <a class="btn btn-warning" href="{{ url_for('login') }}">login</a> to leave a comment.</p>
+            {% endif %}
+        </div>
+    </div>
+  
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="card-title">Related Products</h2>
+            <div class="row">
+                {% for related_product in related_products %}
+                    <div class="col-md-3">
+                        <div class="card mb-4 shadow-sm">
+                            <img src="/{{ related_product.image }}" class="card-img-top" alt="Related Product Image" width="200" height="200">
+                            <div class="card-body">
+                                <a href="{{ url_for('product_info', product_id=related_product.id) }}">
+                                    <h5 class="card-title">{{ related_product.name }}</h5>
+                                </a>
+                                <p class="card-text">Price: ${{ related_product.price }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

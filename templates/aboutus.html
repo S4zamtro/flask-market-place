@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}About Us{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h1>About Us</h1>
+        <p class="lead">Connecting buyers and sellers for seamless transactions</p>
+    </div>
+    
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <img src="{{ url_for('static', filename='NightMarket.png') }}" class="img-fluid rounded" alt="About Us">
+        </div>
+        <div class="col-md-6">
+            <h2>Our Mission</h2>
+            <p>Our mission is to create a community-driven marketplace where individuals can find unique products and services, and businesses can reach a wider audience.</p>
+            <p>We value transparency, trust, and user satisfaction. Our team works tirelessly to ensure that our platform is secure, user-friendly, and efficient. We believe in fostering connections, whether it's between buyers and sellers, or within our team and the community we serve. By prioritizing innovation and user experience, we aim to redefine online commerce, making it more accessible, enjoyable, and rewarding for everyone involved.</p>
+        </div>
+    </div>
+    
+    <div class="row mb-4">
+        <div class="col-md-12 text-center">
+            <h2>Meet Our Team</h2>
+            <p>We are a group of dedicated professionals committed to making your online shopping experience delightful.</p>
+        </div>
+        <div class="col-md-4 text-center">
+            <img src="{{ url_for('static', filename='Kanye.jpg') }}" class="rounded-circle mb-2" alt="Team Member 1" width="150" height="150">
+            <h5>Kanye East</h5>
+            <p>Founder & CEO</p>
+        </div>
+        <div class="col-md-4 text-center">
+            <img src="{{ url_for('static', filename='Beetle.jpg') }}" class="rounded-circle mb-2" alt="Team Member 2" width="150" height="150">
+            <h5>Beetle Juice</h5>
+            <p>COO</p>
+        </div>
+        <div class="col-md-4 text-center">
+            <img src="{{ url_for('static', filename='Meme.jpg') }}" class="rounded-circle mb-2" alt="Team Member 3" width="150" height="150">
+            <h5>Black Jayoma</h5>
+            <p>Lawyer</p>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h2>Join Us</h2>
+            <p>Whether you're a buyer looking for the perfect item or a seller eager to showcase your products, we're here to support you every step of the way.</p>
+            <a href="{{ url_for('register') }}" class="btn btn-warning btn-lg">Register Now</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
